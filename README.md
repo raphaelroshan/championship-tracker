@@ -18,7 +18,12 @@ Main files:
 ## Setup Instructions
 1. Clone the repository.
 2. Install dependencies:
-   pip install -r requirements.txt
+    python -m venv venv
+    source venv/bin/activate for Mac, venv\Scripts\activate for Windows
+    pip install -r requirements.txt
 3. run app with run flask
 
 # How have I met the objectives?
+
+
+Note: my git history features many gitignore updates due to a misconfiguration of my gitignore and vscode settings, has been fixed
