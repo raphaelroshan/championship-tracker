@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from forms import TeamRegistrationForm
 import os
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 # secret key for csrf validation, could be generated with os.urandom(24) for a more secure key
@@ -9,6 +10,15 @@ app.config['SECRET_KEY'] = 'tempsecretkey'
 
 # Store team data locally
 DATA_FILE = 'teams_data.txt'
+
+db = SQLAlchemy()
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///championship-tracker.db"
+db.init_app(app)
+
+def init_db(app):
+    db.init_app(app)
+    with app.app_context():
+        db.create_all()
 
 def store_team_data(data):
     with open(DATA_FILE, 'a') as file:
