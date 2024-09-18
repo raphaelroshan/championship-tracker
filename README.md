@@ -18,5 +18,7 @@ Main files:
 ## Setup Instructions
 1. Clone the repository.
 2. Install dependencies:
-   ```bash
    pip install -r requirements.txt
+3. run app with run flask
+
+# How have I met the objectives?

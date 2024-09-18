@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Registered Teams</title>
+</head>
+<body>
+    <h1>Registered Teams</h1>
+
+    {% if teams %}
+        <ul>
+        {% for team in teams %}
+            <li>{{ team }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No teams registered yet.</p>
+    {% endif %}
+
+    <br>
+    <button onclick="window.location.href='/register_teams'">Register more Teams</button>
+    <button onclick="window.location.href='/clear_data'">Clear Data</button>
+    <button onclick="window.location.href='/'">Return to main page</button>
+</body>
+</html>

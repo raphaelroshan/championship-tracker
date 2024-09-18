@@ -1,0 +1,6 @@
+<form method="POST"></form>
+    {{ form.hidden_tag() }}
+    {{ form.team_data.label }}<br>
+    {{ form.team_data(cols=40, rows=10) }}<br>
+    {{ form.submit() }}
+</form>
