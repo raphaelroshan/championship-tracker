@@ -125,8 +125,25 @@ def view_log():
 
     return render_template('view_log.html', logs=logs)
 
+def reload_data():
+    # used on start, and on edit
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as file:
+            teams = file.readlines()
+        for team_info in teams:
+            team_name, reg_date, group_number = team_info.split()
+            update_registration(team_name, reg_date, group_number)
+
+    if os.path.exists(RESULT_FILE):
+        with open(RESULT_FILE, 'r') as file:
+            results = file.readlines()
+        for result_info in results:
+            team_a_name, team_b_name, team_a_goals, team_b_goals = result_info.split()
+            update_results(team_a_name, team_b_name, team_a_goals, team_b_goals)
+
 @app.route('/')
 def index():
+    reload_data()
     ranked_groups = calculate_rankings_grouped()
     return render_template('index.html', ranked_groups=ranked_groups)
 
