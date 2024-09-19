@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash
-from forms import TeamRegistrationForm, MatchResultsForm
-from models import update_registration, update_results, clear_data
+from forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm
+from models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search
 import os
 
 app = Flask(__name__)
@@ -88,11 +88,27 @@ def clear_data():
         os.remove(DATA_FILE)
     if os.path.exists(RESULT_FILE):
         os.remove(RESULT_FILE)
+    clear_stored_data()
     return redirect(url_for('index'))
+
+@app.route('/search_team', methods=['GET', 'POST'])
+def search_team():
+    form = TeamSearchForm()
+    team_data = None
+    if form.validate_on_submit():
+        team_name = form.team_name.data
+        team_data = search(team_name)
+        if not team_data:
+            flash(f"No results found for team: {team_name}", 'error')
+
+    return render_template('search_team.html', form=form, team_data=team_data)
+
+
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    ranked_groups = calculate_rankings_grouped()
+    return render_template('index.html', ranked_groups=ranked_groups)
 
 if __name__ == '__main__':
     app.run(debug=True)

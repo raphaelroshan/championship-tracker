@@ -5,12 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Championship Tracker</title>
 </head>
+<h1>Welcome to Championship Tracker</h1>
+    {% if ranked_groups %}
+        {% for group_number, ranked_teams in ranked_groups.items() %}
+            <h2>Group {{ group_number }}</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Name</th>
+                        <th>Points</th>
+                        <th>Goals</th>
+                        <th>Matches</th>
+                        <th>Wins</th>
+                        <th>Draws</th>
+                        <th>Losses</th>
+                        <th>Registration Date</th>
+                        <th>Qualified?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for team_id, team_data in ranked_teams %}{% set rank = loop.index0 + 1 %}
+                    <tr>
+                        <td>{{ rank }}</td>
+                        <td>{{ team_data['team_name'] }}</td>
+                        <td>{{ team_data['total_points'] }}</td>
+                        <td>{{ team_data['total_goals'] }}</td>
+                        <td>{{ team_data['total_matches'] }}</td>
+                        <td>{{ team_data['outcomes']['wins'] }}</td>
+                        <td>{{ team_data['outcomes']['draws'] }}</td>
+                        <td>{{ team_data['outcomes']['losses'] }}</td>
+                        <td>{{ team_data['reg_date'] }}</td>
+                        <td>{{ 'Yes' if rank < 4 else 'No' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>No teams registered yet!</p>
+    {% endif %}
 <body>
-    <h1>Welcome to Championship Tracker</h1>
     <button onclick="window.location.href='/register_teams'">Register Teams</button>
     <button onclick="window.location.href='/view_teams'">View Teams</button>
     <button onclick="window.location.href='/clear_data'">Clear Data</button>
     <button onclick="window.location.href='/register_results'">Register match results</button>
     <button onclick="window.location.href='/view_results'">View match results</button>
+    <button onclick="window.location.href='/search_team'">Search team</button>
 </body>
 </html>
