@@ -26,15 +26,18 @@ Main files:
 ## How have I met the objectives?
 # Basic tasks
 
-Update methods: re-registering a team, or updating the match scores
+Update methods:
+1. re-registering a team - done by default in the register team page
+2. updating the match scores - done by using the update results page
 
 # Bonus tasks
 
 
+# Design decisions
+
 # assumptions
 teams must first be registered to play
-Teams are unique, team A can play against team B any number of times, 
-
+Teams are unique, team A can play against team B any number of times
 
 # future improvements:
 inefficient writing of data (should write in bulk preferably, currently single line)

@@ -35,6 +35,13 @@ def update_registration(team_name, reg_date, group_number):
 
 
 def update_results(team_a_name, team_b_name, team_a_goals, team_b_goals):
+    try :
+        team_a_goals = int(team_a_goals)
+        team_b_goals = int(team_b_goals)
+    except ValueError:
+        flash("Goals scored must be integers.", "error")
+        return
+
     if team_a_name not in team_details and team_b_name not in team_details:
         flash(f"Both {team_a_name} and {team_b_name} are not registered. Please register both teams first.", "error")
         return
