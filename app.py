@@ -9,9 +9,14 @@ app.config['SECRET_KEY'] = 'tempsecretkey'
 
 # Store team data locally
 DATA_FILE = 'teams_data.txt'
+RESULT_FILE = 'results_data.txt'
 
 def store_team_data(data):
     with open(DATA_FILE, 'a') as file:
+        file.write(data + '\n')
+
+def store_result_data(data):
+    with open(RESULT_FILE, 'a') as file:
         file.write(data + '\n')
 
 @app.route('/view_teams')
@@ -21,8 +26,17 @@ def view_teams():
             teams = file.readlines()
     else:
         teams = []
-
     return render_template('view_teams.html', teams=teams)
+
+@app.route('/view_results')
+def view_results():
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as file:
+            results = file.readlines()
+    else:
+        results = []
+
+    return render_template('view_results.html', results=results)
 
 @app.route('/register_teams', methods=['GET', 'POST'])
 def register_teams():
@@ -56,9 +70,10 @@ def register_results():
             # Ensure each result line has team names and goals scored, all stored as strings
             try:
                 team_a_name, team_b_name, team_a_goals, team_b_goals = result_info.split()
+                store_result_data(f"{team_a_name} {team_b_name} {team_a_goals} {team_b_goals}")
             except ValueError:
                 flash('Invalid input format. Make sure each line follows the format: <Team A name> <Team B name> <Team A goals scored> <Team B goals scored>', 'error')
-            return redirect(url_for('register_results'))
+                return redirect(url_for('register_results'))
 
         flash('Results registered successfully!', 'success')
         return redirect(url_for('register_results'))
