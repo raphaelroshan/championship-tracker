@@ -5,15 +5,11 @@ This is meant to be a simple python + flask based app that can handle the basic 
 
 Directory structure:
 - Templates : for HTML templates for flask
-- static : for any static CSS/ JS files I add
-- logs : for any recorded logs
 
 Main files:
 - app.py : load the flask app and routes
 - models.py : load the database model
 - forms.py : for input forms (wtflask)
-- views.py : handle routing
-- database.py : handle the db connection
 
 # To run repo
 2 commands to run: Install dependencies with `pip install -r requirements.txt`, and run flask app with `flask run`
