@@ -15,3 +15,7 @@ class TeamSearchForm(FlaskForm):
     team_name = TextAreaField('Enter team name', validators=[DataRequired()],
                               render_kw={"placeholder": "firstTeam"})
     submit = SubmitField('Search Team')
+    
+class EditResultsForm(FlaskForm):
+    results_data = TextAreaField('Edit Match Results', validators=[DataRequired()])
+    submit = SubmitField('Update Results')

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
-from forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm
+from forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm, EditResultsForm
 from models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search, noDataStored
 import os
 from datetime import datetime
@@ -83,24 +83,34 @@ def register_results():
 
 @app.route('/edit_results', methods=['GET', 'POST'])
 def edit_results():
+    form = EditResultsForm()
+
     if os.path.exists('results_data.txt'):
         with open('results_data.txt', 'r') as file:
             results_data = file.read()
     else:
         results_data = ''
 
-    if request.method == 'POST':
+    if form.validate_on_submit():
         log_action("edit results")
+        new_results_data = form.results_data.data
+        clear_file(RESULT_FILE)
         clear_stored_data()
-        new_results_data = request.form['results_data']
-        with open('results_data.txt', 'w') as file:
-            file.write(new_results_data)
         reload_team_data()
-        reload_result_data()
-        flash('Results updated successfully!', 'success')
-        return redirect(url_for('view_results'))
+        # write then read new results
+        results_list = new_results_data.split('\n')
+        for result_info in results_list:
+            try:
+                team_a_name, team_b_name, team_a_goals, team_b_goals = result_info.split()
+                update_results(team_a_name, team_b_name, team_a_goals, team_b_goals)
+                store_result_data(f"{team_a_name} {team_b_name} {team_a_goals} {team_b_goals}")
+            except ValueError:
+                flash('Invalid input format. Make sure each line follows the format: <Team A name> <Team B name> <Team A goals scored> <Team B goals scored>', 'error')
 
-    return render_template('edit_results.html', results_data=results_data)
+        flash('Results updated successfully', 'success')
+        return redirect(url_for('edit_results'))
+
+    return render_template('edit_results.html', form=form)
 
 # clear ALL data
 @app.route('/clear_data')
@@ -171,7 +181,7 @@ def reload_result_data():
 
 @app.route('/')
 def index():
-    if noDataStored:
+    if noDataStored():
         reload_data()
     ranked_groups = calculate_rankings_grouped()
     return render_template('index.html', ranked_groups=ranked_groups)
