@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
-from forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm, EditResultsForm
-from models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search, noDataStored
+from .forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm, EditResultsForm
+from .models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search, noDataStored
 import os
 from datetime import datetime
 

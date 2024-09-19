@@ -30,7 +30,7 @@ Update methods:
 2. updating the match scores - done by using the update results page
 
 ## Bonus tasks
-
+7. Used pylint for static code analysis
 
 # Design decisions
 
