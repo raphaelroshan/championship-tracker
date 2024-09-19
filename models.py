@@ -111,5 +111,5 @@ def calculate_rankings_grouped():
         ranked_groups[group_number] = ranked_teams
     return ranked_groups
 
-def isEmpty():
+def noDataStored():
     return not team_details

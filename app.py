@@ -1,6 +1,6 @@
-from flask import Flask, render_template, redirect, url_for, flash
+from flask import Flask, render_template, redirect, url_for, flash, request
 from forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm
-from models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search
+from models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search, noDataStored
 import os
 from datetime import datetime
 
@@ -81,14 +81,33 @@ def register_results():
 
     return render_template('register_results.html', form=form)
 
+@app.route('/edit_results', methods=['GET', 'POST'])
+def edit_results():
+    if os.path.exists('results_data.txt'):
+        with open('results_data.txt', 'r') as file:
+            results_data = file.read()
+    else:
+        results_data = ''
+
+    if request.method == 'POST':
+        log_action("edit results")
+        clear_stored_data()
+        new_results_data = request.form['results_data']
+        with open('results_data.txt', 'w') as file:
+            file.write(new_results_data)
+        reload_team_data()
+        reload_result_data()
+        flash('Results updated successfully!', 'success')
+        return redirect(url_for('view_results'))
+
+    return render_template('edit_results.html', results_data=results_data)
+
 # clear ALL data
 @app.route('/clear_data')
 def clear_data():
     log_action("clear data")
-    if os.path.exists(DATA_FILE):
-        os.remove(DATA_FILE)
-    if os.path.exists(RESULT_FILE):
-        os.remove(RESULT_FILE)
+    clear_file(DATA_FILE)
+    clear_file(RESULT_FILE)
     clear_stored_data()
     return redirect(url_for('index'))
 
@@ -109,10 +128,13 @@ def log_action(action):
         timestamp = datetime.now().strftime('%d/%m %H:%M:%S')
         file.write(f"{timestamp} - {action}\n")
 
+def clear_file(filename):
+    if os.path.exists(filename):
+        os.remove(filename)
+
 @app.route('/clear_log')
 def clear_log():
-    if os.path.exists(LOG_FILE):
-        os.remove(LOG_FILE)
+    clear_file(LOG_FILE)
     return redirect(url_for('index'))
 
 @app.route('/view_log')
@@ -127,6 +149,11 @@ def view_log():
 
 def reload_data():
     # used on start, and on edit
+    log_action("reloaded data")
+    reload_team_data()
+    reload_result_data()
+
+def reload_team_data():
     if os.path.exists(DATA_FILE):
         with open(DATA_FILE, 'r') as file:
             teams = file.readlines()
@@ -134,6 +161,7 @@ def reload_data():
             team_name, reg_date, group_number = team_info.split()
             update_registration(team_name, reg_date, group_number)
 
+def reload_result_data():
     if os.path.exists(RESULT_FILE):
         with open(RESULT_FILE, 'r') as file:
             results = file.readlines()
@@ -143,7 +171,8 @@ def reload_data():
 
 @app.route('/')
 def index():
-    reload_data()
+    if noDataStored:
+        reload_data()
     ranked_groups = calculate_rankings_grouped()
     return render_template('index.html', ranked_groups=ranked_groups)
 
