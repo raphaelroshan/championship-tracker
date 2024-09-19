@@ -15,13 +15,12 @@ Main files:
 - views.py : handle routing
 - database.py : handle the db connection
 
-## Setup Instructions
-1. Clone the repository.
-2. Install dependencies:
-    python -m venv venv
-    source venv/bin/activate for Mac, venv\Scripts\activate for Windows
-    pip install -r requirements.txt
-3. run app with run flask
+# To run repo
+2 commands to run: Install dependencies with `pip install -r requirements.txt`, and run flask app with `flask run`
+
+Note: I used a venv when running locally, can be done with
+    create venv: `python -m venv venv`
+    enter venv: `source venv/bin/activate` for Mac, `venv\Scripts\activate` for Windows
 
 ## How have I met the objectives?
 # Basic tasks
