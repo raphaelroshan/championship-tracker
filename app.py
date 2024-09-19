@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, flash
 from forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm
 from models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search
 import os
+from datetime import datetime
 
 app = Flask(__name__)
 # secret key for csrf validation, could be generated with os.urandom(24) for a more secure key
@@ -11,6 +12,7 @@ app.config['SECRET_KEY'] = 'tempsecretkey'
 # Store team data locally
 DATA_FILE = 'teams_data.txt'
 RESULT_FILE = 'results_data.txt'
+LOG_FILE = 'log.txt'
 
 def store_team_data(data):
     with open(DATA_FILE, 'a') as file:
@@ -42,12 +44,11 @@ def view_results():
 @app.route('/register_teams', methods=['GET', 'POST'])
 def register_teams():
     form = TeamRegistrationForm()
-
     if form.validate_on_submit():
+        log_action("register teams")
         teams_data = form.teams_data.data
         teams_list = teams_data.split('\n')
         for team_info in teams_list:
-            # Ensure each team line has name, date, group, all stored as strings
             try:
                 team_name, reg_date, group_number = team_info.split()
                 update_registration(team_name, reg_date, group_number)
@@ -63,12 +64,11 @@ def register_teams():
 @app.route('/register_results', methods=['GET', 'POST'])
 def register_results():
     form = MatchResultsForm()
-
     if form.validate_on_submit():
+        log_action("register results")
         results_data = form.teams_data.data
         results_list = results_data.split('\n')
         for result_info in results_list:
-            # Ensure each result line has team names and goals scored, all stored as strings
             try:
                 team_a_name, team_b_name, team_a_goals, team_b_goals = result_info.split()
                 update_results(team_a_name, team_b_name, team_a_goals, team_b_goals)
@@ -82,8 +82,9 @@ def register_results():
     return render_template('register_results.html', form=form)
 
 # clear ALL data
-@app.route('/clear_data', methods=['GET','POST'])
+@app.route('/clear_data')
 def clear_data():
+    log_action("clear data")
     if os.path.exists(DATA_FILE):
         os.remove(DATA_FILE)
     if os.path.exists(RESULT_FILE):
@@ -103,7 +104,26 @@ def search_team():
 
     return render_template('search_team.html', form=form, team_data=team_data)
 
+def log_action(action):
+    with open(LOG_FILE, 'a') as file:
+        timestamp = datetime.now().strftime('%d/%m %H:%M:%S')
+        file.write(f"{timestamp} - {action}\n")
 
+@app.route('/clear_log')
+def clear_log():
+    if os.path.exists(LOG_FILE):
+        os.remove(LOG_FILE)
+    return redirect(url_for('index'))
+
+@app.route('/view_log')
+def view_log():
+    if os.path.exists(LOG_FILE):
+        with open(LOG_FILE, 'r') as file:
+            logs = file.readlines()
+    else:
+        logs = ["No logs available"]
+
+    return render_template('view_log.html', logs=logs)
 
 @app.route('/')
 def index():
