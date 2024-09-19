@@ -84,13 +84,13 @@ def register_results():
 @app.route('/edit_results', methods=['GET', 'POST'])
 def edit_results():
     form = EditResultsForm()
-
-    if os.path.exists('results_data.txt'):
-        with open('results_data.txt', 'r') as file:
-            results_data = file.read()
-    else:
-        results_data = ''
-    form.results_data.data = results_data
+    if request.method == 'GET':
+        if os.path.exists('results_data.txt'):
+            with open('results_data.txt', 'r') as file:
+                results_data = file.read()
+        else:
+            results_data = ''
+        form.results_data.data = results_data
 
     if form.validate_on_submit():
         log_action("edit results")
