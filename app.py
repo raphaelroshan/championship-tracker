@@ -90,6 +90,7 @@ def edit_results():
             results_data = file.read()
     else:
         results_data = ''
+    form.results_data.data = results_data
 
     if form.validate_on_submit():
         log_action("edit results")
