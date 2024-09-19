@@ -1,12 +1,12 @@
-from flask import flash
 from datetime import datetime
 from collections import defaultdict
+from flask import flash
 
 # store team details for retrieval and ranking, can be regenerated from the txt files to simulate persistent storage
 team_details = {} # teamName. : {reg_date, group_number, matches_played, outcomes : {wins, losses, draws}}, json storage
 
 def parse_date(date_str):
-        return datetime.strptime(date_str, '%d/%m')
+    return datetime.strptime(date_str, '%d/%m')
 
 def update_registration(team_name, reg_date, group_number):
     if team_name in team_details:
@@ -31,8 +31,6 @@ def update_registration(team_name, reg_date, group_number):
             'alternate_points': 0
         }
         flash(f"New {team_name} registered.", "success")
-    return
-
 
 def update_results(team_a_name, team_b_name, team_a_goals, team_b_goals):
     try :
@@ -49,7 +47,7 @@ def update_results(team_a_name, team_b_name, team_a_goals, team_b_goals):
     if team_a_name not in team_details:
         flash(f"{team_a_name} is not registered. Please register {team_a_name} first.", "error")
         return
-    
+
     if team_b_name not in team_details:
         flash(f"{team_b_name} is not registered. Please register {team_b_name} first.", "error")
         return
@@ -89,7 +87,6 @@ def update_results(team_a_name, team_b_name, team_a_goals, team_b_goals):
 
 def clear_stored_data():
     team_details.clear()
-    return
 
 def search(team_name):
     return team_details.get(team_name)
@@ -111,5 +108,5 @@ def calculate_rankings_grouped():
         ranked_groups[group_number] = ranked_teams
     return ranked_groups
 
-def noDataStored():
+def no_data_stored():
     return not team_details

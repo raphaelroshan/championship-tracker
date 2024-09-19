@@ -1,13 +1,14 @@
-from flask import Flask, render_template, redirect, url_for, flash, request
-from .forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm, EditResultsForm
-from .models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search, noDataStored
 import os
 from datetime import datetime
+from flask import Flask, render_template, redirect, url_for, flash, request
+from .forms import TeamRegistrationForm, MatchResultsForm, TeamSearchForm, EditResultsForm
+from .models import update_registration, update_results, clear_stored_data, calculate_rankings_grouped, search, no_data_stored
+
 
 app = Flask(__name__)
 # secret key for csrf validation, could be generated with os.urandom(24) for a more secure key
 # csrf validation is included in FlaskForm
-app.config['SECRET_KEY'] = 'tempsecretkey' 
+app.config['SECRET_KEY'] = 'tempsecretkey'
 
 # Store team data locally
 DATA_FILE = 'teams_data.txt'
@@ -182,7 +183,7 @@ def reload_result_data():
 
 @app.route('/')
 def index():
-    if noDataStored():
+    if no_data_stored():
         reload_data()
     ranked_groups = calculate_rankings_grouped()
     return render_template('index.html', ranked_groups=ranked_groups)
