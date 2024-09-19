@@ -1,8 +1,6 @@
 from flask import Flask, render_template, redirect, url_for, flash
 from forms import TeamRegistrationForm, MatchResultsForm
 import os
-from flask_sqlalchemy import SQLAlchemy
-from models import MatchResult
 
 app = Flask(__name__)
 # secret key for csrf validation, could be generated with os.urandom(24) for a more secure key
@@ -11,18 +9,6 @@ app.config['SECRET_KEY'] = 'tempsecretkey'
 
 # Store team data locally
 DATA_FILE = 'teams_data.txt'
-
-db = SQLAlchemy()
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///championship-tracker.db"
-db.init_app(app)
-
-def create_tables():
-    db.create_all()
-
-def init_db(app):
-    db.init_app(app)
-    with app.app_context():
-        db.create_all()
 
 def store_team_data(data):
     with open(DATA_FILE, 'a') as file:
@@ -70,14 +56,6 @@ def register_results():
             # Ensure each result line has team names and goals scored, all stored as strings
             try:
                 team_a_name, team_b_name, team_a_goals, team_b_goals = result_info.split()
-                match_result = MatchResult(
-                    team_a_name=team_a_name,
-                    team_b_name=team_b_name,
-                    team_a_goals=team_a_goals,
-                    team_b_goals=team_b_goals
-                )
-                db.session.add(match_result)
-                db.session.commit()
             except ValueError:
                 flash('Invalid input format. Make sure each line follows the format: <Team A name> <Team B name> <Team A goals scored> <Team B goals scored>', 'error')
             return redirect(url_for('register_results'))
@@ -98,6 +76,4 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    with app.app_context():
-        create_tables()
     app.run(debug=True)

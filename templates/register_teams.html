@@ -8,7 +8,6 @@
 <body>
     <h1>Register Teams</h1>
 
-    <!-- Display flash messages for feedback -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <ul>
@@ -19,7 +18,6 @@
       {% endif %}
     {% endwith %}
 
-    <!-- Render the registration form -->
     <form method="POST" action="/register_teams">
         {{ form.hidden_tag() }}
         <div>
