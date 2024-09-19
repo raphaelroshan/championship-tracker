@@ -6,9 +6,8 @@ from .models import update_registration, update_results, clear_stored_data, calc
 
 
 app = Flask(__name__)
-# secret key for csrf validation, could be generated with os.urandom(24) for a more secure key
 # csrf validation is included in FlaskForm
-app.config['SECRET_KEY'] = 'tempsecretkey'
+app.config['SECRET_KEY'] = os.urandom(24)
 
 # Store team data locally
 DATA_FILE = 'teams_data.txt'

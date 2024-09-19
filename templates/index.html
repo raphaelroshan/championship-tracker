@@ -36,7 +36,7 @@
                         <td>{{ team_data['outcomes']['draws'] }}</td>
                         <td>{{ team_data['outcomes']['losses'] }}</td>
                         <td>{{ team_data['reg_date'] }}</td>
-                        <td>{{ 'Yes' if rank < 4 else 'No' }}</td>
+                        <td>{{ 'Yes' if rank <= 4 else 'No' }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
