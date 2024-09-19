@@ -23,7 +23,22 @@ Main files:
     pip install -r requirements.txt
 3. run app with run flask
 
-# How have I met the objectives?
+## How have I met the objectives?
+# Basic tasks
 
+Update methods: re-registering a team, or updating the match scores
+
+# Bonus tasks
+
+
+# assumptions
+teams must first be registered to play
+Teams are unique, team A can play against team B any number of times, 
+
+
+# future improvements:
+inefficient writing of data (should write in bulk preferably, currently single line)
+inefficient update of data (should re-read single value preferably, currently reads all data)
+unclear logging (logging should be more granular, not just button based)
 
 Note: my git history features many gitignore updates due to a misconfiguration of my gitignore and vscode settings, has been fixed
