@@ -10,9 +10,9 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 
 # Store team data locally
-DATA_FILE = 'teams_data.txt'
-RESULT_FILE = 'results_data.txt'
-LOG_FILE = 'log.txt'
+DATA_FILE = './teams_data.txt'
+RESULT_FILE = './results_data.txt'
+LOG_FILE = './log.txt'
 
 def store_team_data(data):
     with open(DATA_FILE, 'a') as file:

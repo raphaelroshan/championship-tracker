@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Results</title>
+</head>
+<body>
+    <h1>Edit Match Results</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/edit_results">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.results_data.label }}<br>
+            {{ form.results_data(rows=12, cols=40) }}
+        </div>
+        <br>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+
+    <br>
+    <button onclick="window.location.href='/'">Return to main page</button>
+</body>
+</html>

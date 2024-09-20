@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search</title>
+</head>
+<body>
+    <h1>Search for Team Results</h1>
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <ul>
+            {% for category, message in messages %}
+                <li class="flash {{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+        {% endif %}
+    {% endwith %}
+    
+    {% if team_data %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Name</th>
+                    <th>Points</th>
+                    <th>Goals</th>
+                    <th>Matches</th>
+                    <th>Wins</th>
+                    <th>Draws</th>
+                    <th>Losses</th>
+                    <th>Registration Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ rank }}</td>
+                    <td>{{ team_data['team_name'] }}</td>
+                    <td>{{ team_data['total_points'] }}</td>
+                    <td>{{ team_data['total_goals'] }}</td>
+                    <td>{{ team_data['total_matches'] }}</td>
+                    <td>{{ team_data['outcomes']['wins'] }}</td>
+                    <td>{{ team_data['outcomes']['draws'] }}</td>
+                    <td>{{ team_data['outcomes']['losses'] }}</td>
+                    <td>{{ team_data['reg_date'] }}</td>
+                </tr>
+            </tbody>
+        </table>
+    {% endif %}
+
+    <form method="POST" action="/search_team">
+        {{ form.hidden_tag() }}
+        <div>
+            {{ form.team_name.label }}<br>
+            {{ form.team_name(rows=1, cols=40) }}
+        </div>
+        <br>
+        <div>
+            {{ form.submit() }}
+        </div>
+    </form>
+
+    <button onclick="window.location.href='/'">Return to main page</button>
+</body>
+</html>

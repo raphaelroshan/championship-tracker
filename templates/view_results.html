@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Match Results</title>
+</head>
+<body>
+    <h1>Match results</h1>
+
+    {% if results %}
+        <ul>
+        {% for result in results %}
+            <li>{{ result }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No matches played yet.</p>
+    {% endif %}
+
+    <br>
+    <button onclick="window.location.href='/register_results'">Register more matches</button>
+    <button onclick="window.location.href='/clear_data'">Clear Data</button>
+    <button onclick="window.location.href='/'">Return to main page</button>
+</body>
+</html>
