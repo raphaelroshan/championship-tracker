@@ -12,7 +12,9 @@ Main files:
 - forms.py : for input forms (wtflask)
 
 # To run repo
-2 commands to run in the folder's terminal: Install dependencies with `pip install -r requirements.txt`, and run flask app with `flask run`. 
+2 commands to run in the folder's terminal: 
+1. Install dependencies with `pip install -r requirements.txt`
+2. run flask app with `flask run`. 
 The website will be viewable on http://localhost:5000/, or http://127.0.0.1:5000
 
 Note: I used a venv when running locally, can be done with
