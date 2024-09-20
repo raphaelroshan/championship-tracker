@@ -37,7 +37,8 @@ Note: I used a venv when running locally, can be done with
 
 ## Bonus tasks achieved
 3. Database persistence: Txt files act as db, allow flask to reload data as needed across multiple restarts
-4. Handle invalid input sensibly: Done by raising errors when data is incorrectly processed, and notifying user. Also input is required to avoid empty submissions
+4. Handle invalid input sensibly: Done by raising errors when data is incorrectly passed such as dates or insufficient parameters, and notifying user. 
+Also input is required to avoid empty submissions.
 7. Static code analysis: Used pylint for static code analysis, with .pylintrc settings and pylint_report.txt artifact
 note: the remaining bonus tasks are detailed below with future plans
 

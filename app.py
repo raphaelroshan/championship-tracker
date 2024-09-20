@@ -51,10 +51,11 @@ def register_teams():
         for team_info in teams_list:
             try:
                 team_name, reg_date, group_number = team_info.split()
+                datetime.strptime(reg_date, "%d/%m")
                 update_registration(team_name, reg_date, group_number)
                 store_team_data(f"{team_name} {reg_date} {group_number}")
             except ValueError:
-                flash('Invalid input format. Make sure each line follows the format: <Team Name> <DD/MM> <Group Number>', 'error')
+                flash('Invalid input format or invalid date. Make sure each line follows the format: <Team Name> <DD/MM> <Group Number>', 'error')
                 return redirect(url_for('register_teams'))
 
         return redirect(url_for('register_teams'))
